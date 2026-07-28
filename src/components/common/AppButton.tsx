@@ -28,9 +28,7 @@ interface AppButtonProps {
   icon?: React.ReactNode;
 }
 
-/**
- * AppButton — Claymorphism buttons with gradient primary variant.
- */
+
 const AppButton: React.FC<AppButtonProps> = ({
   title,
   onPress,

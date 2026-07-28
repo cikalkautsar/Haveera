@@ -1,62 +1,62 @@
+import AppText from '@/src/components/common/AppText';
+import { useAuthStore } from '@/src/store/authStore';
+import { Colors, FontFamily, Spacing } from '@/src/theme';
+import { useRouter } from 'expo-router';
 import React from 'react';
 import {
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  Image,
-  Dimensions,
+    Image,
+    StyleSheet,
+    TouchableOpacity,
+    useWindowDimensions,
+    View,
 } from 'react-native';
-import { useRouter } from 'expo-router';
-import { Colors, Spacing, Radius, FontFamily, FontSize } from '@/src/theme';
-import { useAuthStore } from '@/src/store/authStore';
-import AppText from '@/src/components/common/AppText';
-
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 export default function OnboardingScreen() {
   const router = useRouter();
   const { completeOnboarding } = useAuthStore();
+  const { width, height } = useWindowDimensions();
 
   const handleStart = () => {
     completeOnboarding();
-    router.replace('/(auth)/login');
+    router.replace('/auth/login');
   };
 
+  const imgWidth = width * 0.48;
+  const imgHeight = Math.min(imgWidth * 1.4, height * 0.52);
+
   return (
-    <View style={styles.container}>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={handleStart}
+      activeOpacity={1}
+      accessibilityRole="button"
+      accessibilityLabel="Mulai"
+    >
       {/* Arabic Greeting */}
-      <View style={styles.topSection}>
+      <View style={[styles.topSection, { paddingTop: height * 0.07 }]}>
         <AppText style={styles.arabic}>ٱلسَّلَامُ عَلَيْكُمْ</AppText>
         <AppText style={styles.title}>Selamat Datang di{'\n'}Haveera!</AppText>
       </View>
 
       {/* Characters */}
-      <View style={styles.charactersRow}>
+      <View style={[styles.charactersRow, { width }]}>
         <Image
           source={require('@/assets/images/Ikhwan.png')}
-          style={styles.characterLeft}
+          style={{ width: imgWidth, height: imgHeight }}
           resizeMode="contain"
         />
         <Image
           source={require('@/assets/images/Akhwat.png')}
-          style={styles.characterRight}
+          style={{ width: imgWidth, height: imgHeight }}
           resizeMode="contain"
         />
       </View>
 
-      {/* CTA Button */}
-      <View style={styles.buttonWrap}>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={handleStart}
-          activeOpacity={0.85}
-          accessibilityRole="button"
-          accessibilityLabel="Mulai"
-        >
-          <AppText style={styles.buttonText}>Bismillah yuk mulai</AppText>
-        </TouchableOpacity>
+      {/* Tap hint — center of screen */}
+      <View style={styles.hintWrap} pointerEvents="none">
+        <AppText style={styles.hintText}>Ketuk di mana saja untuk mulai</AppText>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }
 
@@ -66,60 +66,46 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingBottom: Spacing.xxl,
+    paddingBottom: Spacing.lg,
   },
   topSection: {
     alignItems: 'center',
-    paddingTop: SCREEN_HEIGHT * 0.12,
     paddingHorizontal: Spacing.xl,
     gap: Spacing.md,
   },
   arabic: {
     fontFamily: FontFamily.regular,
-    fontSize: 28,
+    fontSize: 26,
     color: '#222',
     textAlign: 'center',
-    lineHeight: 44,
+    lineHeight: 42,
   },
   title: {
     fontFamily: FontFamily.bold,
-    fontSize: 28,
+    fontSize: 26,
     color: Colors.primary,
     textAlign: 'center',
-    lineHeight: 38,
+    lineHeight: 36,
   },
   charactersRow: {
     flexDirection: 'row',
     alignItems: 'flex-end',
     justifyContent: 'space-between',
-    width: SCREEN_WIDTH,
     flex: 1,
-    paddingHorizontal: 0,
   },
-  characterLeft: {
-    width: SCREEN_WIDTH * 0.42,
-    height: SCREEN_WIDTH * 0.55,
+  hintWrap: {
+    position: 'absolute',
+    top: '50%',
+    alignSelf: 'center',
+    backgroundColor: 'rgba(255,255,255,0.75)',
+    paddingHorizontal: Spacing.base,
+    paddingVertical: Spacing.xs,
+    borderRadius: 20,
   },
-  characterRight: {
-    width: SCREEN_WIDTH * 0.42,
-    height: SCREEN_WIDTH * 0.55,
-  },
-  buttonWrap: {
-    paddingHorizontal: Spacing.xl,
-    width: '100%',
-    alignItems: 'center',
-  },
-  button: {
-    backgroundColor: Colors.primary,
-    paddingVertical: 14,
-    paddingHorizontal: 40,
-    borderRadius: Radius.full,
-    alignItems: 'center',
-  },
-  buttonText: {
-    fontFamily: FontFamily.semiBold,
-    fontSize: FontSize.body,
-    color: '#FFFFFF',
+  hintText: {
+    fontFamily: FontFamily.regular,
+    fontSize: 13,
+    color: Colors.textSecondary,
     letterSpacing: 0.3,
   },
 });

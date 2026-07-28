@@ -1,6 +1,3 @@
-/**
- * Haveera Spacing System — Updated for Claymorphism
- */
 
 export const Spacing = {
   xs: 4,

@@ -1,19 +1,28 @@
-import React from 'react';
-import { Alert, View, StyleSheet, TouchableOpacity, KeyboardAvoidingView, Platform, Image } from 'react-native';
-import { useRouter } from 'expo-router';
-import { useForm, Controller } from 'react-hook-form';
+import AppButton from '@/src/components/common/AppButton';
+import AppInput from '@/src/components/common/AppInput';
+import AppText from '@/src/components/common/AppText';
+import ScreenContainer from '@/src/components/common/ScreenContainer';
+import { mapSupabaseUser, useAuthStore } from '@/src/store/authStore';
 import { Colors, Spacing } from '@/src/theme';
 import { LoginFormValues } from '@/src/types/auth.types';
-import { useAuthStore, mapSupabaseUser } from '@/src/store/authStore';
 import { supabase } from '@/supabase';
-import ScreenContainer from '@/src/components/common/ScreenContainer';
-import AppText from '@/src/components/common/AppText';
-import AppInput from '@/src/components/common/AppInput';
-import AppButton from '@/src/components/common/AppButton';
+import { useRouter } from 'expo-router';
+import React, { useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import {
+    Alert,
+    Image,
+    KeyboardAvoidingView,
+    Platform,
+    StyleSheet,
+    TouchableOpacity,
+    View
+} from 'react-native';
 
-export default function LoginScreen() {
+export default function Login() {
   const router = useRouter();
   const { login } = useAuthStore();
+  const [loginError, setLoginError] = useState<string | null>(null);
 
   const {
     control,
@@ -24,29 +33,31 @@ export default function LoginScreen() {
   });
 
   const onSubmit = async (data: LoginFormValues) => {
+    setLoginError(null);
     try {
       const username = data.username.trim().toLowerCase();
-
-      // Step 1: Resolve username → email via RPC (bypass RLS, SECURITY DEFINER)
       const { data: email, error: rpcError } = await supabase
         .rpc('get_email_by_username', { p_username: username });
 
-      if (rpcError) throw rpcError;
-      if (!email) throw new Error('Username tidak ditemukan.');
+      if (rpcError || !email) {
+        setLoginError('Username atau password sepertinya salah. Coba lagi.');
+        return;
+      }
 
-      // Step 2: Sign in with the resolved email
       const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
         email,
         password: data.password,
       });
 
-      if (authError) throw authError;
-      if (!authData.user) throw new Error('Login gagal, coba lagi.');
+      if (authError || !authData.user) {
+        setLoginError('Username atau password sepertinya salah. Coba lagi.');
+        return;
+      }
 
       login(mapSupabaseUser(authData.user));
       router.replace('/(main)/home');
-    } catch (err: any) {
-      Alert.alert('Login Gagal', err.message ?? 'Terjadi kesalahan.');
+    } catch {
+      setLoginError('Terjadi kesalahan. Periksa koneksimu dan coba lagi.');
     }
   };
 
@@ -62,12 +73,11 @@ export default function LoginScreen() {
           </View>
           <AppText variant="heading">Welcome Back</AppText>
           <AppText variant="body" color={Colors.textSecondary} align="center">
-            Masuk untuk melanjutkan ibadah kamu
+            Masuk untuk melanjutkan perjalanan spiritualmu
           </AppText>
         </View>
 
         <View style={styles.form}>
-          {/* Username */}
           <Controller
             control={control}
             name="username"
@@ -93,7 +103,6 @@ export default function LoginScreen() {
             )}
           />
 
-          {/* Password */}
           <Controller
             control={control}
             name="password"
@@ -113,6 +122,25 @@ export default function LoginScreen() {
               />
             )}
           />
+
+          {/* Lupa Password */}
+          <TouchableOpacity
+            onPress={() => router.push('/auth/forgot-password' as any)}
+            style={styles.forgotBtn}
+            accessibilityRole="button"
+            accessibilityLabel="Lupa password"
+          >
+            <AppText variant="caption" color={Colors.primary}>Lupa Password?</AppText>
+          </TouchableOpacity>
+
+          {/* Inline error */}
+          {loginError && (
+            <View style={styles.errorBanner}>
+              <AppText variant="caption" color={Colors.error ?? '#D32F2F'}>
+                {loginError}
+              </AppText>
+            </View>
+          )}
 
           <AppButton
             title="Login"
@@ -144,7 +172,7 @@ export default function LoginScreen() {
             Belum punya akun?{' '}
           </AppText>
           <TouchableOpacity
-            onPress={() => router.push('/(auth)/register')}
+            onPress={() => router.push('/auth/register')}
             accessibilityRole="button"
             accessibilityLabel="Create account"
           >
@@ -201,5 +229,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     paddingVertical: Spacing.base,
+  },
+  forgotBtn: {
+    alignSelf: 'flex-end',
+    marginTop: -Spacing.xs,
+  },
+  errorBanner: {
+    backgroundColor: '#FFF0F0',
+    borderRadius: 8,
+    borderLeftWidth: 3,
+    borderLeftColor: '#D32F2F',
+    paddingHorizontal: Spacing.base,
+    paddingVertical: Spacing.sm,
   },
 });

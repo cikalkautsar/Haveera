@@ -1,45 +1,42 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, TouchableOpacity, Switch, Alert } from 'react-native';
-import { useRouter } from 'expo-router';
-import { Colors, Spacing } from '@/src/theme';
-import AppText from '@/src/components/common/AppText';
 import AppCard from '@/src/components/common/AppCard';
+import AppText from '@/src/components/common/AppText';
 import ScreenContainer from '@/src/components/common/ScreenContainer';
-
-interface SettingRowProps {
-  label: string;
-  value?: string;
-  onPress?: () => void;
-  rightElement?: React.ReactNode;
-}
-
-interface SettingToggleProps {
-  label: string;
-  description?: string;
-  value: boolean;
-  onValueChange: (v: boolean) => void;
-}
+import { useAuthStore } from '@/src/store/authStore';
+import { Colors, Radius, Spacing } from '@/src/theme';
+import { supabase } from '@/supabase';
+import { useRouter } from 'expo-router';
+import React, { useState } from 'react';
+import {
+  ActivityIndicator,
+  Alert,
+  KeyboardAvoidingView,
+  Linking,
+  Modal,
+  Platform,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
 export default function SettingsScreen() {
   const router = useRouter();
-  const [notificationsEnabled, setNotificationsEnabled] = useState(true);
-  const [language, setLanguage] = useState<'English' | 'Bahasa Indonesia'>('English');
-  const calculationMethod = 'Muslim World League';
-  const [madhhab, setMadhhab] = useState('Shafi');
+  const { user } = useAuthStore();
 
-  const handleDeleteAccount = () => {
-    Alert.alert(
-      'Delete Account',
-      'This action is irreversible. All your data will be permanently deleted.',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        { text: 'Delete', style: 'destructive', onPress: () => {} },
-      ],
+  const [emailModalVisible, setEmailModalVisible] = useState(false);
+  const [passwordModalVisible, setPasswordModalVisible] = useState(false);
+
+  const displayEmail = user?.email ?? '—';
+
+  const handleOpenLink = (url: string) => {
+    Linking.openURL(url).catch(() =>
+      Alert.alert('Error', 'Could not open link.'),
     );
   };
 
   return (
     <ScreenContainer scrollable>
+      {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity
           onPress={() => router.back()}
@@ -51,64 +48,213 @@ export default function SettingsScreen() {
         <AppText variant="heading">Settings</AppText>
       </View>
 
-      <SettingSection title="General">
-        <SettingToggle
-          label="Notifications"
-          description="Prayer time and worship reminders"
-          value={notificationsEnabled}
-          onValueChange={setNotificationsEnabled}
+      {/* ── ACCOUNT ── */}
+      <SettingSection title="Account">
+        {/* Email row */}
+        <SettingRow
+          label="Email"
+          value={displayEmail}
+          onPress={() => setEmailModalVisible(true)}
         />
+
         <View style={styles.divider} />
+
+        {/* Change password */}
         <SettingRow
-          label="Language"
-          value={language}
-          onPress={() =>
-            setLanguage((l) =>
-              l === 'English' ? 'Bahasa Indonesia' : 'English',
-            )
-          }
+          label="Change Password"
+          onPress={() => setPasswordModalVisible(true)}
         />
       </SettingSection>
 
-
-      <SettingSection title="Prayer">
-        <SettingRow
-          label="Calculation Method"
-          value={calculationMethod}
-          onPress={() => {}}
-        />
-        <View style={styles.divider} />
-        <SettingRow
-          label="Madhhab"
-          value={madhhab}
-          onPress={() =>
-            setMadhhab((m) =>
-              ['Shafi', 'Hanafi', 'Maliki', 'Hanbali'][
-                (['Shafi', 'Hanafi', 'Maliki', 'Hanbali'].indexOf(m) + 1) % 4
-              ],
-            )
-          }
-        />
-      </SettingSection>
-
-      <SettingSection title="Privacy">
-        <SettingRow
-          label="Delete Account"
-          onPress={handleDeleteAccount}
-          destructive
-        />
-      </SettingSection>
-
-
+      {/* ── ABOUT ── */}
       <SettingSection title="About">
-        <SettingRow label="Version" value="1.0.0 (MVP)" />
+        <SettingRow label="Version" value="1.0.0" />
         <View style={styles.divider} />
-        <SettingRow label="Licenses" onPress={() => {}} />
+        <SettingRow
+          label="Licenses"
+          onPress={() => router.push('/(main)/profile/licenses' as any)}
+        />
+        <View style={styles.divider} />
+        <SettingRow
+          label="Privacy Policy"
+          onPress={() => handleOpenLink('https://haveera.app/privacy')}
+        />
+        <View style={styles.divider} />
+        <SettingRow
+          label="Terms of Service"
+          onPress={() => handleOpenLink('https://haveera.app/terms')}
+        />
+        <View style={styles.divider} />
+        <SettingRow
+          label="Send Feedback"
+          onPress={() => handleOpenLink('mailto:feedback@haveera.app')}
+        />
       </SettingSection>
+
+      {/* Modals */}
+      <ChangeEmailModal
+        visible={emailModalVisible}
+        currentEmail={displayEmail}
+        onClose={() => setEmailModalVisible(false)}
+      />
+      <ChangePasswordModal
+        visible={passwordModalVisible}
+        onClose={() => setPasswordModalVisible(false)}
+      />
     </ScreenContainer>
   );
 }
 
+// ─────────────────────────────────────────────
+// Change Email Modal
+// ─────────────────────────────────────────────
+function ChangeEmailModal({
+  visible,
+  currentEmail,
+  onClose,
+}: {
+  visible: boolean;
+  currentEmail: string;
+  onClose: () => void;
+}) {
+  const [email, setEmail] = useState(currentEmail);
+  const [loading, setLoading] = useState(false);
+
+  const handleSave = async () => {
+    if (!email || email === currentEmail) { onClose(); return; }
+    setLoading(true);
+    const { error } = await supabase.auth.updateUser({ email });
+    setLoading(false);
+    if (error) {
+      Alert.alert('Gagal', error.message);
+    } else {
+      Alert.alert('Berhasil', 'Email berhasil diperbarui. Cek inbox kamu untuk konfirmasi.');
+      onClose();
+    }
+  };
+
+  return (
+    <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
+      <KeyboardAvoidingView
+        style={styles.modalOverlay}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      >
+        <View style={styles.modalSheet}>
+          <AppText variant="heading" style={{ marginBottom: Spacing.base }}>Ganti Email</AppText>
+          <TextInput
+            style={styles.input}
+            value={email}
+            onChangeText={setEmail}
+            placeholder="Email baru"
+            placeholderTextColor={Colors.textDisabled}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            autoComplete="email"
+            accessibilityLabel="New email input"
+          />
+          <TouchableOpacity
+            style={[styles.saveBtn, loading && { opacity: 0.6 }]}
+            onPress={handleSave}
+            disabled={loading}
+            activeOpacity={0.8}
+            accessibilityRole="button"
+            accessibilityLabel="Save email"
+          >
+            {loading
+              ? <ActivityIndicator color="#fff" />
+              : <AppText variant="body" color="#fff" style={{ fontWeight: '700', textAlign: 'center' }}>Simpan</AppText>
+            }
+          </TouchableOpacity>
+          <TouchableOpacity onPress={onClose} style={styles.cancelBtn} activeOpacity={0.7}>
+            <AppText variant="body" color={Colors.textSecondary} style={{ textAlign: 'center' }}>Batal</AppText>
+          </TouchableOpacity>
+        </View>
+      </KeyboardAvoidingView>
+    </Modal>
+  );
+}
+
+// ─────────────────────────────────────────────
+// Change Password Modal
+// ─────────────────────────────────────────────
+function ChangePasswordModal({
+  visible,
+  onClose,
+}: {
+  visible: boolean;
+  onClose: () => void;
+}) {
+  const [password, setPassword] = useState('');
+  const [confirm, setConfirm] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleSave = async () => {
+    if (!password) { Alert.alert('Password tidak boleh kosong'); return; }
+    if (password !== confirm) { Alert.alert('Password tidak cocok'); return; }
+    setLoading(true);
+    const { error } = await supabase.auth.updateUser({ password });
+    setLoading(false);
+    if (error) {
+      Alert.alert('Gagal', error.message);
+    } else {
+      Alert.alert('Berhasil', 'Password berhasil diperbarui.');
+      setPassword('');
+      setConfirm('');
+      onClose();
+    }
+  };
+
+  return (
+    <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
+      <KeyboardAvoidingView
+        style={styles.modalOverlay}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      >
+        <View style={styles.modalSheet}>
+          <AppText variant="heading" style={{ marginBottom: Spacing.base }}>Ganti Password</AppText>
+          <TextInput
+            style={[styles.input, { marginBottom: Spacing.sm }]}
+            value={password}
+            onChangeText={setPassword}
+            placeholder="Password baru"
+            placeholderTextColor={Colors.textDisabled}
+            secureTextEntry
+            accessibilityLabel="New password input"
+          />
+          <TextInput
+            style={styles.input}
+            value={confirm}
+            onChangeText={setConfirm}
+            placeholder="Konfirmasi password"
+            placeholderTextColor={Colors.textDisabled}
+            secureTextEntry
+            accessibilityLabel="Confirm password input"
+          />
+          <TouchableOpacity
+            style={[styles.saveBtn, loading && { opacity: 0.6 }]}
+            onPress={handleSave}
+            disabled={loading}
+            activeOpacity={0.8}
+            accessibilityRole="button"
+            accessibilityLabel="Save password"
+          >
+            {loading
+              ? <ActivityIndicator color="#fff" />
+              : <AppText variant="body" color="#fff" style={{ fontWeight: '700', textAlign: 'center' }}>Simpan</AppText>
+            }
+          </TouchableOpacity>
+          <TouchableOpacity onPress={onClose} style={styles.cancelBtn} activeOpacity={0.7}>
+            <AppText variant="body" color={Colors.textSecondary} style={{ textAlign: 'center' }}>Batal</AppText>
+          </TouchableOpacity>
+        </View>
+      </KeyboardAvoidingView>
+    </Modal>
+  );
+}
+
+// ─────────────────────────────────────────────
+// Sub-components
+// ─────────────────────────────────────────────
 function SettingSection({
   title,
   children,
@@ -126,7 +272,15 @@ function SettingSection({
   );
 }
 
-function SettingRow({ label, value, onPress, destructive = false }: SettingRowProps & { destructive?: boolean }) {
+function SettingRow({
+  label,
+  value,
+  onPress,
+}: {
+  label: string;
+  value?: string;
+  onPress?: () => void;
+}) {
   return (
     <TouchableOpacity
       style={styles.row}
@@ -136,47 +290,24 @@ function SettingRow({ label, value, onPress, destructive = false }: SettingRowPr
       accessibilityRole={onPress ? 'button' : 'text'}
       accessibilityLabel={label}
     >
-      <AppText
-        variant="body"
-        color={destructive ? Colors.error : Colors.textPrimary}
-        style={styles.rowLabel}
-      >
+      <AppText variant="body" color={Colors.textPrimary} style={styles.rowLabel}>
         {label}
       </AppText>
       {value && (
-        <AppText variant="body" color={Colors.textSecondary}>
+        <AppText variant="body" color={Colors.textSecondary} numberOfLines={1} style={{ maxWidth: '55%' }}>
           {value}
         </AppText>
       )}
-      {onPress && !value && (
+      {onPress && (
         <AppText variant="body" color={Colors.textDisabled}>›</AppText>
       )}
     </TouchableOpacity>
   );
 }
 
-function SettingToggle({ label, description, value, onValueChange }: SettingToggleProps) {
-  return (
-    <View style={styles.row}>
-      <View style={styles.toggleLeft}>
-        <AppText variant="body">{label}</AppText>
-        {description && (
-          <AppText variant="caption" color={Colors.textSecondary}>
-            {description}
-          </AppText>
-        )}
-      </View>
-      <Switch
-        value={value}
-        onValueChange={onValueChange}
-        trackColor={{ false: Colors.border, true: Colors.primaryMedium }}
-        thumbColor={Colors.background}
-        accessibilityLabel={label}
-      />
-    </View>
-  );
-}
-
+// ─────────────────────────────────────────────
+// Styles
+// ─────────────────────────────────────────────
 const styles = StyleSheet.create({
   header: {
     paddingTop: Spacing.xl,
@@ -191,6 +322,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.xs,
     letterSpacing: 0.8,
   },
+  // Setting row
   row: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -202,13 +334,42 @@ const styles = StyleSheet.create({
   rowLabel: {
     flex: 1,
   },
-  toggleLeft: {
-    flex: 1,
-    gap: 2,
-  },
   divider: {
     height: 1,
     backgroundColor: Colors.divider,
     marginHorizontal: Spacing.base,
+  },
+  // Modal
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.45)',
+    justifyContent: 'flex-end',
+  },
+  modalSheet: {
+    backgroundColor: Colors.background,
+    borderTopLeftRadius: Radius.bottomSheet,
+    borderTopRightRadius: Radius.bottomSheet,
+    padding: Spacing.xxl,
+    paddingBottom: Spacing.xxxl,
+    gap: Spacing.sm,
+  },
+  input: {
+    borderWidth: 1.5,
+    borderColor: Colors.border,
+    borderRadius: Radius.md,
+    paddingHorizontal: Spacing.base,
+    paddingVertical: Spacing.md,
+    color: Colors.textPrimary,
+    fontSize: 15,
+    marginBottom: Spacing.md,
+  },
+  saveBtn: {
+    backgroundColor: Colors.primary,
+    borderRadius: Radius.button,
+    paddingVertical: Spacing.md,
+    marginTop: Spacing.xs,
+  },
+  cancelBtn: {
+    paddingVertical: Spacing.sm,
   },
 });

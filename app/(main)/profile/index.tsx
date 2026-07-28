@@ -194,7 +194,7 @@ export default function ProfileScreen() {
               colors={['rgba(255,255,255,0.6)', 'rgba(255,255,255,0)']}
               style={[StyleSheet.absoluteFillObject, { borderRadius: Radius.clay }]}
             />
-            <AppText style={{ fontSize: 40, textAlign: 'center' }}>👋</AppText>
+        
             <AppText variant="title" align="center">Yakin keluar?</AppText>
             <AppText variant="body" color={C.textSecondary} align="center" style={{ lineHeight: 22 }}>
               Kamu bisa masuk kembali kapan saja menggunakan username dan password.

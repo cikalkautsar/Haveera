@@ -1,15 +1,14 @@
+import { useTheme } from '@/src/context/ThemeContext';
+import { FontFamily, FontSize, Radius, Spacing } from '@/src/theme';
 import React, { useState } from 'react';
 import {
-  View,
-  TextInput,
-  Text,
   StyleSheet,
-  ViewStyle,
+  Text,
+  TextInput,
   TextInputProps,
-  TouchableOpacity,
+  View,
+  ViewStyle,
 } from 'react-native';
-import { Spacing, Radius, FontFamily, FontSize } from '@/src/theme';
-import { useTheme } from '@/src/context/ThemeContext';
 
 interface AppInputProps extends TextInputProps {
   label?: string;
@@ -33,13 +32,12 @@ const AppInput: React.FC<AppInputProps> = ({
 }) => {
   const { C } = useTheme();
   const [isFocused, setIsFocused] = useState(false);
-  const [isSecure, setIsSecure] = useState(isPassword);
 
   const borderColor = errorMessage
     ? C.error
     : isFocused
-    ? C.primary
-    : C.border;
+      ? C.primary
+      : C.border;
 
   return (
     <View style={[styles.container, containerStyle]}>
@@ -53,19 +51,10 @@ const AppInput: React.FC<AppInputProps> = ({
           placeholderTextColor={C.textDisabled}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
-          secureTextEntry={isSecure}
+          secureTextEntry={isPassword}
           autoCapitalize="none"
           {...inputProps}
         />
-        {isPassword && (
-          <TouchableOpacity
-            onPress={() => setIsSecure((prev) => !prev)}
-            accessibilityLabel={isSecure ? 'Show password' : 'Hide password'}
-            style={styles.eyeButton}
-          >
-            <Text style={styles.eyeText}>{isSecure ? '👁' : '🙈'}</Text>
-          </TouchableOpacity>
-        )}
       </View>
 
       {errorMessage ? (

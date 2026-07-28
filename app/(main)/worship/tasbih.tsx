@@ -178,7 +178,6 @@ export default function TasbihScreen() {
                   style={styles.modalItem}
                   onPress={() => {
                     setActiveItem(item);
-                    if (item.default_target) setTarget(item.default_target);
                     setShowPicker(false);
                   }}
                 >
@@ -278,8 +277,8 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     backgroundColor: Colors.background,
-    borderTopLeftRadius: Radius.xl,
-    borderTopRightRadius: Radius.xl,
+    borderTopLeftRadius: Radius.bottomSheet,
+    borderTopRightRadius: Radius.bottomSheet,
     maxHeight: '80%',
   },
   modalHeader: {

@@ -1,22 +1,18 @@
-import React from 'react';
-import { Alert } from 'react-native';
-import {
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  KeyboardAvoidingView,
-  Platform,
-  Image,
-} from 'react-native';
-import { useRouter } from 'expo-router';
-import { useForm, Controller } from 'react-hook-form';
+import AppButton from '@/src/components/common/AppButton';
+import AppInput from '@/src/components/common/AppInput';
+import AppText from '@/src/components/common/AppText';
+import ScreenContainer from '@/src/components/common/ScreenContainer';
 import { Colors, Spacing } from '@/src/theme';
 import { RegisterFormValues } from '@/src/types/auth.types';
-import ScreenContainer from '@/src/components/common/ScreenContainer';
-import AppText from '@/src/components/common/AppText';
-import AppInput from '@/src/components/common/AppInput';
-import AppButton from '@/src/components/common/AppButton';
 import { supabase } from '@/supabase';
+import { useRouter } from 'expo-router';
+import React from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import {
+    Alert, KeyboardAvoidingView,
+    Platform, StyleSheet,
+    TouchableOpacity, View
+} from 'react-native';
 
 export default function RegisterScreen() {
   const router = useRouter();
@@ -43,7 +39,7 @@ export default function RegisterScreen() {
     try {
       const username = data.username.trim().toLowerCase();
 
-      // Step 1: Check if username already taken
+      // ini cek dlu username nya ada apa ga
       const { data: existing } = await supabase
         .from('profiles')
         .select('id')
@@ -55,7 +51,7 @@ export default function RegisterScreen() {
         return;
       }
 
-      // Step 2: Create Supabase Auth account
+      // ini bkin data kl gak ada
       const { data: authData, error: signUpError } = await supabase.auth.signUp({
         email: data.email,
         password: data.password,
@@ -71,7 +67,7 @@ export default function RegisterScreen() {
       if (signUpError) throw signUpError;
       if (!authData.user) throw new Error('Gagal membuat akun.');
 
-      // Step 3: Insert into profiles table
+
       const { error: profileError } = await supabase.from('profiles').upsert({
         id: authData.user.id,
         email: data.email,
@@ -85,7 +81,7 @@ export default function RegisterScreen() {
       Alert.alert(
         'Akun Dibuat!',
         'Silakan cek email kamu untuk verifikasi, lalu login.',
-        [{ text: 'OK', onPress: () => router.replace('/(auth)/login') }],
+        [{ text: 'OK', onPress: () => router.replace('/auth/login') }],
       );
     } catch (err: any) {
       console.error('Registration error:', err);
@@ -116,13 +112,12 @@ export default function RegisterScreen() {
         
         <View style={styles.form}>
 
-          {/* Full Name */}
           <Controller
             control={control}
             name="name"
             rules={{
               required: 'Nama lengkap wajib diisi',
-              minLength: { value: 2, message: 'Nama terlalu pendek' },
+              minLength: { value:3, message: 'Minimal 3 karakter' },
             }}
             render={({ field: { onChange, onBlur, value } }) => (
               <AppInput
@@ -137,7 +132,6 @@ export default function RegisterScreen() {
             )}
           />
 
-          {/* Username */}
           <Controller
             control={control}
             name="username"
@@ -164,7 +158,6 @@ export default function RegisterScreen() {
             )}
           />
 
-          {/* Email */}
           <Controller
             control={control}
             name="email"
@@ -186,7 +179,6 @@ export default function RegisterScreen() {
             )}
           />
 
-          {/* Password */}
           <Controller
             control={control}
             name="password"
@@ -207,7 +199,6 @@ export default function RegisterScreen() {
             )}
           />
 
-          {/* Confirm Password */}
           <Controller
             control={control}
             name="confirmPassword"
@@ -228,7 +219,7 @@ export default function RegisterScreen() {
             )}
           />
 
-          {/* Gender selector */}
+  
           <Controller
             control={control}
             name="gender"
@@ -283,7 +274,7 @@ export default function RegisterScreen() {
             Sudah punya akun?{' '}
           </AppText>
           <TouchableOpacity
-            onPress={() => router.push('/(auth)/login')}
+            onPress={() => router.push('/auth/login')}
             accessibilityRole="button"
             accessibilityLabel="Login"
           >

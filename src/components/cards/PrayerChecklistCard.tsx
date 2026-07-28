@@ -77,9 +77,9 @@ const PrayerItem: React.FC<PrayerItemProps> = ({ prayer, onToggle }) => {
         style={[
           styles.indicator,
           isCompleted
-            ? { backgroundColor: C.primary, shadowColor: C.primary }
+            ? { backgroundColor: C.primary }
             : isMissed
-              ? { backgroundColor: C.warning, shadowColor: C.warning }
+              ? { backgroundColor: C.warning }
               : {
                 backgroundColor: 'transparent',
                 borderWidth: 2,
@@ -176,10 +176,6 @@ const styles = StyleSheet.create({
     borderRadius: 17,
     alignItems: 'center',
     justifyContent: 'center',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 3,
   },
   checkmark: {
     color: '#FFFFFF',

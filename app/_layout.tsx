@@ -1,13 +1,13 @@
+import { ThemeProvider } from '@/src/context/ThemeContext';
+import { mapSupabaseUser, useAuthStore } from '@/src/store/authStore';
+import { Colors } from '@/src/theme';
+import { supabase } from '@/supabase';
+import { Inter_400Regular, Inter_500Medium, Inter_600SemiBold, Inter_700Bold, useFonts } from '@expo-google-fonts/inter';
 import { Stack, useRouter, useSegments } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { useFonts, Inter_400Regular, Inter_500Medium, Inter_600SemiBold, Inter_700Bold } from '@expo-google-fonts/inter';
-import { View, ActivityIndicator } from 'react-native';
-import { Colors } from '@/src/theme';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useEffect } from 'react';
-import { supabase } from '@/supabase';
-import { useAuthStore, mapSupabaseUser } from '@/src/store/authStore';
-import { ThemeProvider } from '@/src/context/ThemeContext';
+import { ActivityIndicator, View } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 
 function AuthGuard() {
@@ -27,7 +27,7 @@ function AuthGuard() {
           // Only force back to login if the user explicitly signs out.
           // This allows the initial splash screen and onboarding to render properly.
           if (_event === 'SIGNED_OUT') {
-            router.replace('/(auth)/login');
+            router.replace('/auth/login');
           }
         }
       },
@@ -64,7 +64,7 @@ export default function RootLayout() {
           <Stack.Screen name="index" />
           <Stack.Screen name="splash" />
           <Stack.Screen name="onboarding" />
-          <Stack.Screen name="(auth)" />
+          <Stack.Screen name="auth" />
           <Stack.Screen name="(main)" />
         </Stack>
       </ThemeProvider>
