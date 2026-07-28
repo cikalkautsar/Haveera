@@ -1,0 +1,162 @@
+[
+  {
+    "id": 1,
+    "judul": "Tasbih",
+    "arab": "سُبْحَانَ اللَّهِ",
+    "latin": "Subḥānallāh",
+    "arti": "Maha Suci Allah.",
+    "kategori": "Tasbih"
+  },
+  {
+    "id": 2,
+    "judul": "Tahmid",
+    "arab": "الْحَمْدُ لِلَّهِ",
+    "latin": "Alḥamdulillāh",
+    "arti": "Segala puji bagi Allah.",
+    "kategori": "Tahmid"
+  },
+  {
+    "id": 3,
+    "judul": "Takbir",
+    "arab": "اللَّهُ أَكْبَرُ",
+    "latin": "Allāhu Akbar",
+    "arti": "Allah Maha Besar.",
+    "kategori": "Takbir"
+  },
+  {
+    "id": 4,
+    "judul": "Tahlil",
+    "arab": "لَا إِلَٰهَ إِلَّا اللَّهُ",
+    "latin": "Lā ilāha illallāh",
+    "arti": "Tiada Tuhan selain Allah.",
+    "kategori": "Tahlil"
+  },
+  {
+    "id": 5,
+    "judul": "Istighfar",
+    "arab": "أَسْتَغْفِرُ اللَّهَ",
+    "latin": "Astaghfirullāh",
+    "arti": "Aku memohon ampun kepada Allah.",
+    "kategori": "Istighfar"
+  },
+  {
+    "id": 6,
+    "judul": "Istighfar Lengkap",
+    "arab": "أَسْتَغْفِرُ اللَّهَ الْعَظِيمَ وَأَتُوبُ إِلَيْهِ",
+    "latin": "Astaghfirullāhal-'Aẓīm wa atūbu ilaih",
+    "arti": "Aku memohon ampun kepada Allah Yang Maha Agung dan aku bertaubat kepada-Nya.",
+    "kategori": "Istighfar"
+  },
+  {
+    "id": 7,
+    "judul": "Hauqalah",
+    "arab": "لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ",
+    "latin": "Lā ḥaula wa lā quwwata illā billāh",
+    "arti": "Tiada daya dan kekuatan kecuali dengan pertolongan Allah.",
+    "kategori": "Dzikir"
+  },
+  {
+    "id": 8,
+    "judul": "Hasbunallah",
+    "arab": "حَسْبُنَا اللَّهُ وَنِعْمَ الْوَكِيلُ",
+    "latin": "Ḥasbunallāhu wa ni'mal wakīl",
+    "arti": "Cukuplah Allah menjadi Penolong kami dan Dia sebaik-baik Pelindung.",
+    "kategori": "Dzikir"
+  },
+  {
+    "id": 9,
+    "judul": "Subhanallahi wa Bihamdihi",
+    "arab": "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ",
+    "latin": "Subḥānallāhi wa biḥamdih",
+    "arti": "Maha Suci Allah dan segala puji bagi-Nya.",
+    "kategori": "Tasbih"
+  },
+  {
+    "id": 10,
+    "judul": "Subhanallahil 'Azhim",
+    "arab": "سُبْحَانَ اللَّهِ الْعَظِيمِ",
+    "latin": "Subḥānallāhil-'Aẓīm",
+    "arti": "Maha Suci Allah Yang Maha Agung.",
+    "kategori": "Tasbih"
+  },
+  {
+    "id": 11,
+    "judul": "Dua Kalimat Ringan",
+    "arab": "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ سُبْحَانَ اللَّهِ الْعَظِيمِ",
+    "latin": "Subḥānallāhi wa biḥamdih, Subḥānallāhil-'Aẓīm",
+    "arti": "Maha Suci Allah dan segala puji bagi-Nya. Maha Suci Allah Yang Maha Agung.",
+    "kategori": "Tasbih"
+  },
+  {
+    "id": 12,
+    "judul": "Dzikir Paling Utama",
+    "arab": "لَا إِلَٰهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَىٰ كُلِّ شَيْءٍ قَدِيرٌ",
+    "latin": "Lā ilāha illallāhu waḥdahū lā syarīka lah, lahul mulku wa lahul ḥamdu wa huwa 'alā kulli syai'in qadīr.",
+    "arti": "Tiada Tuhan selain Allah semata, tiada sekutu bagi-Nya. Milik-Nya kerajaan dan segala puji. Dia Maha Kuasa atas segala sesuatu.",
+    "kategori": "Tahlil"
+  },
+  {
+    "id": 13,
+    "judul": "Shalawat Pendek",
+    "arab": "اللَّهُمَّ صَلِّ عَلَىٰ مُحَمَّدٍ",
+    "latin": "Allāhumma ṣalli 'alā Muḥammad",
+    "arti": "Ya Allah, limpahkanlah shalawat kepada Nabi Muhammad.",
+    "kategori": "Shalawat"
+  },
+  {
+    "id": 14,
+    "judul": "Shalawat Ibrahimiyah",
+    "arab": "اللَّهُمَّ صَلِّ عَلَىٰ مُحَمَّدٍ وَعَلَىٰ آلِ مُحَمَّدٍ كَمَا صَلَّيْتَ عَلَىٰ إِبْرَاهِيمَ وَعَلَىٰ آلِ إِبْرَاهِيمَ إِنَّكَ حَمِيدٌ مَجِيدٌ، اللَّهُمَّ بَارِكْ عَلَىٰ مُحَمَّدٍ وَعَلَىٰ آلِ مُحَمَّدٍ كَمَا بَارَكْتَ عَلَىٰ إِبْرَاهِيمَ وَعَلَىٰ آلِ إِبْرَاهِيمَ إِنَّكَ حَمِيدٌ مَجِيدٌ",
+    "latin": "Allāhumma ṣalli 'alā Muḥammadin wa 'alā āli Muḥammad kamā ṣallaita 'alā Ibrāhīm wa 'alā āli Ibrāhīm innaka ḥamīdun majīd. Allāhumma bārik 'alā Muḥammadin wa 'alā āli Muḥammad kamā bārakta 'alā Ibrāhīm wa 'alā āli Ibrāhīm innaka ḥamīdun majīd.",
+    "arti": "Ya Allah, limpahkanlah shalawat dan keberkahan kepada Nabi Muhammad dan keluarganya sebagaimana kepada Nabi Ibrahim dan keluarganya.",
+    "kategori": "Shalawat"
+  },
+  {
+    "id": 15,
+    "judul": "Sayyidul Istighfar",
+    "arab": "اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَٰهَ إِلَّا أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَىٰ عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ، وَأَبُوءُ بِذَنْبِي، فَاغْفِرْ لِي، فَإِنَّهُ لَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ",
+    "latin": "Allāhumma anta rabbī lā ilāha illā anta, khalaqtanī wa anā 'abduka, wa anā 'alā 'ahdika wa wa'dika mastaṭa'tu, a'ūdzu bika min syarri mā ṣana'tu, abū'u laka bini'matika 'alayya, wa abū'u bidzanbī, faghfir lī fa innahū lā yaghfirudz-dzunūba illā anta.",
+    "arti": "Ya Allah, Engkau adalah Tuhanku. Tidak ada Tuhan selain Engkau. Engkau menciptakanku dan aku adalah hamba-Mu. Aku berada di atas janji-Mu semampuku. Aku berlindung kepada-Mu dari keburukan yang telah kuperbuat. Aku mengakui nikmat-Mu kepadaku dan aku mengakui dosaku. Maka ampunilah aku, karena tidak ada yang mengampuni dosa selain Engkau.",
+    "kategori": "Doa"
+  },
+  {
+    "id": 16,
+    "judul": "Doa Nabi Yunus",
+    "arab": "لَا إِلَٰهَ إِلَّا أَنْتَ سُبْحَانَكَ إِنِّي كُنْتُ مِنَ الظَّالِمِينَ",
+    "latin": "Lā ilāha illā anta subḥānaka innī kuntu minaẓ-ẓālimīn",
+    "arti": "Tiada Tuhan selain Engkau. Maha Suci Engkau. Sungguh aku termasuk orang-orang yang zalim.",
+    "kategori": "Doa"
+  },
+  {
+    "id": 17,
+    "judul": "Ya Muqallibal Qulub",
+    "arab": "يَا مُقَلِّبَ الْقُلُوبِ ثَبِّتْ قَلْبِي عَلَىٰ دِينِكَ",
+    "latin": "Yā Muqallibal-qulūb, tsabbit qalbī 'alā dīnik",
+    "arti": "Wahai Dzat yang membolak-balikkan hati, teguhkanlah hatiku di atas agama-Mu.",
+    "kategori": "Doa"
+  },
+  {
+    "id": 18,
+    "judul": "Rabbi Ghfirli",
+    "arab": "رَبِّ اغْفِرْ لِي وَتُبْ عَلَيَّ إِنَّكَ أَنْتَ التَّوَّابُ الرَّحِيمُ",
+    "latin": "Rabbi-ghfir lī wa tub 'alayya innaka antat-Tawwābur-Raḥīm",
+    "arti": "Ya Rabbku, ampunilah aku dan terimalah taubatku. Sesungguhnya Engkau Maha Penerima Taubat lagi Maha Penyayang.",
+    "kategori": "Doa"
+  },
+  {
+    "id": 19,
+    "judul": "Doa Kebaikan Dunia Akhirat",
+    "arab": "رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ",
+    "latin": "Rabbanā ātinā fid-dunyā ḥasanah wa fil-ākhirati ḥasanah wa qinā 'adzāban-nār",
+    "arti": "Ya Tuhan kami, berilah kami kebaikan di dunia dan kebaikan di akhirat serta lindungilah kami dari azab neraka.",
+    "kategori": "Doa"
+  },
+  {
+    "id": 20,
+    "judul": "Hasbiyallahu",
+    "arab": "حَسْبِيَ اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ عَلَيْهِ تَوَكَّلْتُ وَهُوَ رَبُّ الْعَرْشِ الْعَظِيمِ",
+    "latin": "Ḥasbiyallāhu lā ilāha illā huwa 'alaihi tawakkaltu wa huwa rabbul-'arsyil-'aẓīm",
+    "arti": "Cukuplah Allah bagiku. Tidak ada Tuhan selain Dia. Hanya kepada-Nya aku bertawakal, dan Dia adalah Tuhan Pemilik 'Arsy yang agung.",
+    "kategori": "Doa"
+  }
+]
